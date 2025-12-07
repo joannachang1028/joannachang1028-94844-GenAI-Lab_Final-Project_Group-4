@@ -1,0 +1,22 @@
+{
+  "overall_sentiment": {
+    "positive": 80,
+    "neutral": 15,
+    "negative": 5
+  },
+  "positive_themes": [
+    "Effective pain relief",
+    "Strong and durable motor",
+    "Good customer service and warranty support",
+    "Compact and easy to use",
+    "Heat feature enhances relaxation"
+  ],
+  "negative_themes": [
+    "Wiring issues over time",
+    "Cover wears out with use",
+    "Automatic directional switch can be inconvenient",
+    "Pressure can be difficult to adjust"
+  ],
+  "visual_sentiment": "Customers generally find the massager to be sturdy and well-designed, although some mention wear and tear on the exterior fabric over time.",
+  "satisfaction_score": 9
+}

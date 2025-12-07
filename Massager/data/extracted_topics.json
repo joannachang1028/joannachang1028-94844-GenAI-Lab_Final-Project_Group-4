@@ -1,0 +1,103 @@
+{
+  "topics": [
+    {
+      "topic_name": "Durability",
+      "description": "Customers frequently mention the longevity and sturdiness of the massager, highlighting its ability to withstand heavy use over time.",
+      "keywords": [
+        "sturdy",
+        "long-lasting",
+        "durable",
+        "wear and tear"
+      ],
+      "visual_relevance": "High"
+    },
+    {
+      "topic_name": "Heating Function",
+      "description": "The option for heat is a popular feature, with many customers noting how it enhances the massage experience.",
+      "keywords": [
+        "heat",
+        "soothing",
+        "warming",
+        "relaxation"
+      ],
+      "visual_relevance": "Medium"
+    },
+    {
+      "topic_name": "Effectiveness",
+      "description": "Reviews often highlight the effectiveness of the massager in relieving muscle tension and pain, particularly in the back and neck.",
+      "keywords": [
+        "effective",
+        "pain relief",
+        "muscle tension",
+        "soothing"
+      ],
+      "visual_relevance": "High"
+    },
+    {
+      "topic_name": "Compact Design",
+      "description": "Customers appreciate the compact size of the massager, making it easy to move and store.",
+      "keywords": [
+        "compact",
+        "lightweight",
+        "portable",
+        "easy to store"
+      ],
+      "visual_relevance": "High"
+    },
+    {
+      "topic_name": "Customer Service",
+      "description": "Many reviews commend the company's customer service, particularly regarding warranty replacements for worn covers.",
+      "keywords": [
+        "customer service",
+        "warranty",
+        "replacement cover",
+        "responsive"
+      ],
+      "visual_relevance": "Low"
+    },
+    {
+      "topic_name": "User-Friendly Controls",
+      "description": "Customers mention the simplicity and ease of use of the massager's controls, enhancing the overall user experience.",
+      "keywords": [
+        "easy to use",
+        "controls",
+        "user-friendly",
+        "intuitive"
+      ],
+      "visual_relevance": "Medium"
+    },
+    {
+      "topic_name": "Versatility",
+      "description": "The massager's ability to be used on different body parts (back, neck, legs) is frequently noted, adding to its versatility.",
+      "keywords": [
+        "versatile",
+        "multi-use",
+        "different body parts",
+        "adjustable"
+      ],
+      "visual_relevance": "Medium"
+    },
+    {
+      "topic_name": "Pressure Sensitivity",
+      "description": "Customers discuss the pressure applied by the massager, with some finding it too intense or difficult to adjust.",
+      "keywords": [
+        "pressure",
+        "intensity",
+        "sensitive",
+        "adjustable"
+      ],
+      "visual_relevance": "Medium"
+    },
+    {
+      "topic_name": "Design Flaws",
+      "description": "Some reviews mention issues with the wiring and automatic directional switch, which can affect usability.",
+      "keywords": [
+        "design flaws",
+        "wiring issues",
+        "automatic switch",
+        "disconnect"
+      ],
+      "visual_relevance": "Medium"
+    }
+  ]
+}
