@@ -1,191 +1,602 @@
-## Final Project – Generating Product Image from Customer Reviews
+# Final Project Presentation
 
-**Course**: 94‑844 Generative AI Lab (Fall 2025)  
-**Group 4**: Yu Zhang, Yongqi Yu, Libin Chen, Joanna Chang  
+## GROUP 4
 
-This project builds an end‑to‑end pipeline that converts **customer reviews → structured text features → high‑fidelity image prompts → product images** using LLMs and diffusion models.
-
----
-
-## Product Overview
-
-We study three visually and semantically rich products from distinct categories:
-
-| **Product** | **Category** | **Rating & Volume** |
-| --- | --- | --- |
-| **Zyllion Shiatsu Back and Neck Massager with Heat** | Health & Household | 4.4 ★ (50,884 reviews) |
-| **8BitDo Retro Mechanical Keyboard** | PC Accessories | 4.8 ★ (2,183 reviews) |
-| **Hario V60 Ceramic Pour Over Coffee Set** | Home & Kitchen | 4.6 ★ (1,921 reviews) |
-
-- **Distinct categories**: health device, keyboard, coffee gear → diverse shapes and use contexts.  
-- **Visually & semantically rich**: each product has strong visual identity and rich review language.  
-- **Diverse review volumes**: from ~2k to 50k reviews, all highly rated (4.4–4.8), providing ample but noisy textual signal.
+YU ZHANG
+YONGQI YU
+LIBIN CHEN
+JOANNA CHANG
 
 ---
 
-## Pipeline Overview
+# Outline
 
-**Massager differs** mainly in **review numbers** and **chunking strategy**; all three share the same LLM.
-
-|  | **Massager** | **Keyboard** | **Coffee Set** |
-| --- | --- | --- | --- |
-| **Text model** | `gpt-5.1` | `gpt-5.1` | `gpt-5.1` |
-| **How reviews are obtained (top reviews)** | Web scraping (Selenium + Amazon) | Hard‑coded real top reviews | Hard‑coded real reviews |
-| **# of reviews used in pipeline** | 50 reviews | 5 reviews | 5 reviews |
-| **Chunking strategy** | `chunk_size = 3000`, `overlap = 200` (per‑chunk summarization) | None | None |
-
-All three pipelines then feed into a shared **image generation** stage that uses:
-
-- **OpenAI GPT‑Image‑1** (`gpt‑image‑1`)  
-- **Stable Diffusion XL (SDXL)** (`stabilityai/stable-diffusion-xl-base-1.0`)
+* Product Overview
+* Pipeline Selection
+    * Model
+    * Chunking strategy
+* Analytics Engine Components
+    * Summarization, Visual feature, Product feature, Sentiment analysis
+    * Topic extraction, Image generation summary
+* Image Generation
+* AI Agentic Workflow
+* Challenges and Limitations
+* Future Enhancements
 
 ---
 
-## Analytics Engine Components (Q2)
+# Overview of Product Categories
 
-We implement a modular analytics engine over review + description text.
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ZYLLION SHIATSU BACK AND NECK MASSAGER WITH HEAT</td>
+<td>8BITDO RETRO MECHANICAL KEYBOARD</td>
+<td>HARIO V60 CERAMIC POUR OVER COFFEE SET</td>
+    </tr>
+<tr>
+      <td>Health & Household</td>
+<td>PC Accessories</td>
+<td>Home & Kitchen</td>
+    </tr>
+<tr>
+      <td>4.4 ⭐ (50,884 reviews)</td>
+<td>4.8 ⭐ (2,183 reviews)</td>
+<td>4.6 ⭐ (1,921 reviews)</td>
+    </tr>
+  </tbody>
+</table>
 
-### Summarization
 
-- **Massager**: per‑chunk summaries aggregated into a condensed review text.  
-- **Keyboard**: no standalone global summary (tasks operate directly on full reviews).  
-- **Coffee set**: overall summary + pros / cons + frequently mentioned keywords.
-
-### Visual Feature Extraction
-
-- **Massager** – rich schema:
-  1. Colors mentioned  
-  2. Materials described  
-  3. Size / dimensions  
-  4. Shape / design elements  
-  5. Textures  
-  6. Visual features (buttons, straps, etc.)  
-  7. Overall appearance  
-
-- **Keyboard**:
-  1. colors  
-  2. materials  
-  3. shape_design  
-  4. visual_features (e.g., knobs, LEDs, Super Buttons)  
-  5. overall_aesthetic  
-
-- **Coffee set**:
-  1. materials  
-  2. colors  
-  3. shapes  
-  4. textures  
-  5. patterns  
-  6. functional visual elements  
-  7. usage scenes  
-
-### Product Feature Extraction (functional / design)
-
-- **Massager**:
-  1. Functional features (what it does)  
-  2. Design features (design elements)  
-  3. Material features  
-  4. Size / portability  
-  5. Usage context (where / how used)  
-  6. Key selling points  
-
-- **Keyboard**:
-  1. functional_features  
-  2. design_features  
-  3. connectivity  
-  4. unique_selling_points  
-
-- **Coffee set**:
-  - No separate product‑feature JSON; functional aspects are merged into visual‑feature extraction.
-
-### Sentiment Analysis
-
-- **Massager**:
-  1. Overall sentiment distribution  
-  2. Sentiment themes  
-  3. Visual sentiment  
-  4. Satisfaction score  
-
-- **Keyboard**:
-  1. Overall sentiment  
-  2. Sentiment themes  
-  3. Visual sentiment  
-
-- **Coffee set**:
-  1. Overall sentiment  
-  2. Sentiment distribution  
-  3. Reasons for sentiment  
-  4. One‑sentence summary  
-
-### Topic Extraction
-
-- **Massager**:
-  - Topic name, description, keywords, visual relevance.  
-- **Keyboard**:
-  - No topic extraction (design choice to keep pipeline minimal).  
-- **Coffee set**:
-  - Topics + descriptions + representative keywords + representative comments.
-
-### Image Generation Summary
-
-- **Massager & Keyboard**:
-  - JSON with:
-    - `visual_description`  
-    - `key_visual_elements`  
-    - `recommended_prompt_for_image_generation`  
-
-- **Coffee set**:
-  - A curated list of recommended prompts used directly for image generation.
 
 ---
 
-## Image Generation
+# Rationale for Selection
 
-We transform the structured text into images using two models:
+<table>
+  <thead>
+    <tr>
+      <th>DISTINCT CATEGORIES</th>
+      <th>VISUALLY & SEMANTICALLY RICH</th>
+      <th>DIVERSE REVIEW VOLUMES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Three distinct product categories enhances the **diversity** of the evaluation and ensures **varied textual cues** for analysis</td>
+<td>The selected products are **visually** and **semantically rich**, providing ample opportunities for exploring text-derived visual signals and enhancing model performance</td>
+<td>Review counts range from 2,000 to 50,000, and all products have consistently high average ratings between 4.4 and 4.8</td>
+    </tr>
+  </tbody>
+</table>
 
-### OpenAI GPT‑Image‑1
 
-- Better at following structured prompts and instructions.  
-- More accurate geometry and object layout.  
-- Lower hallucination, simpler textures.  
-
-### Stable Diffusion XL (SDXL)
-
-- More photorealistic textures and lighting.  
-- Highly aesthetic images, high diversity.  
-- More frequent semantic drift and component errors.
-
-### Prompt Versioning Strategy
-
-For each product we test **three prompt styles**:
-
-1. **Prompt v1 – Natural language**  
-2. **Prompt v2 – Condensed attribute‑focused**  
-3. **Prompt v3 – Structured photorealistic**  
-
-Structured prompts (v3) consistently produce the most faithful and stable results.
 
 ---
 
-## Key Findings
+# Pipeline Overview
 
-- **OpenAI GPT‑Image‑1** → higher semantic accuracy (correct parts and layout).  
-- **SDXL** → more photorealistic but with more hallucinated or incorrect components.  
-- For all three products, **customer reviews contain enough signal to approximate the product**, but fine geometric details and UI elements are still hard to match exactly.  
-- **Massager** benefits from chunked, high‑volume reviews; **Keyboard** shows the effect of detailed but low‑N reviews; **Coffee set** demonstrates the simplest end‑to‑end baseline.
+Massager differs in
+* Review numbers
+* Chunking strategy
+
+<table>
+    <thead>
+    <tr>
+        <th></th>
+        <th>Massager</th>
+        <th>Keyboard</th>
+        <th>Coffee Set</th>
+    </tr>
+    </thead>
+    <tr>
+        <td>Model</td>
+<td>gpt-5.1</td>
+<td>gpt-5.1</td>
+<td>gpt-5.1</td>
+    </tr>
+<tr>
+        <td>How reviews
+<br/>
+are obtained
+<br/>
+(top reviews)</td>
+<td>Web scraping
+<br/>
+(Selenium package)</td>
+<td>Hard-coded</td>
+<td>Hard-coded</td>
+    </tr>
+<tr>
+        <td># of reviews</td>
+<td>50 reviews</td>
+<td>5 reviews</td>
+<td>5 reviews</td>
+    </tr>
+<tr>
+        <td>Chunking
+<br/>
+Strategy</td>
+<td>chunk_size = 3000
+<br/>
+overlap = 200</td>
+<td>None</td>
+<td>None</td>
+    </tr>
+</table>
+
+
 
 ---
 
-## Challenges & Future Work
+# Analytics Engine Components
 
-**Challenges**
-- Noisy, inconsistent review language.  
-- Limited review subsets (5–50) may not fully represent the full customer population.  
-- Lack of objective metrics for comparing generated vs. real product images.
+## Keyboard
+* No summarization
+* Fewer feature extraction
 
-**Future Enhancements**
-- Improve chunking strategies to preserve context while controlling cost.  
-- Experiment with different structured representations from Q2 to drive generation.  
-- Explore fine‑tuning or reward‑based optimization with similarity metrics.  
-- Build a more complete **multi‑agent workflow** (Researcher / Analyst / Creative / Visualizer) with feedback loops from generated images back into the pipeline.
+## Coffee set
+* No product feature extraction
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Massager</th>
+      <th>Keyboard</th>
+      <th>Coffee Set</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Summarization</td>
+<td>per-chunk summaries</td>
+<td><span style="color:red;">None</span></td>
+<td>Overall summary, pros/cons, keywords</td>
+    </tr>
+<tr>
+      <td>Visual feature extraction</td>
+<td>
+        <ol>
+          <li>Colors mentioned</li>
+          <li>Materials described</li>
+          <li>Size/Dimensions</li>
+          <li>Shape/Design elements</li>
+          <li>Textures</li>
+          <li>Visual features (buttons, straps, etc.)</li>
+          <li>Overall appearance</li>
+        </ol>
+      </td>
+<td>
+        <ol>
+          <li>colors</li>
+          <li>materials</li>
+          <li>shape design</li>
+          <li>visual features</li>
+          <li>overall aesthetic</li>
+        </ol>
+      </td>
+<td>
+        <ol>
+          <li>materials</li>
+          <li>colors</li>
+          <li>shapes</li>
+          <li>textures</li>
+          <li>patterns</li>
+          <li>functional visual element</li>
+          <li>usage scenes</li>
+        </ol>
+      </td>
+    </tr>
+<tr>
+      <td>Product feature extraction<br>(functional/ design)</td>
+<td>
+        <ol>
+          <li>Functional Features (what it does)</li>
+          <li>Design Features (design elements)</li>
+          <li>Material Features</li>
+          <li>Size/Portability</li>
+          <li>Usage Context (where/how used)</li>
+          <li>Key Selling Points</li>
+        </ol>
+      </td>
+<td>
+        <ol>
+          <li>functional_feature</li>
+          <li>design_features</li>
+          <li>connectivity</li>
+          <li>unique_selling_points</li>
+        </ol>
+      </td>
+<td><span style="color:red;">None</span><br>(combined with visual feature extraction)</td>
+    </tr>
+  </tbody>
+</table>
 
 
+
+---
+
+# Visual feature & Product feature (conti.)
+
+```python
+visual_prompt = f"""
+Analyze the following customer reviews and extract ALL visual information about the product.
+Product: Zyllion Shiatsu Back and Neck Massager with Heat (Model: ZMA-13)
+{condensed_review_text}
+Extract:
+1. Colors mentioned
+2. Materials described
+3. Size/Dimensions
+4. Shape/Design elements
+5. Textures
+6. Visual features (buttons, straps, etc.)
+7. Overall appearance
+Format as JSON:
+{{
+    "colors": ["color1", "color2"],
+    "materials": ["material1", "material2"],
+    "size_dimensions": ["mention1", "mention2"],
+    "shape_design": ["feature1", "feature2"],
+    "textures": ["texture1", "texture2"],
+    "visual_features": ["feature1", "feature2"],
+    "overall_appearance": "summary description"
+}}
+"""
+```
+
+```python
+visual_prompt = f"""
+Analyze the following reviews for the 8BitDo Retro Mechanical Keyboard.
+Extract ONLY visual/physical attributes.
+Reviews:
+{all_review_text[:15000]}
+Return JSON with keys:
+colors, materials, shape_design, visual_features (specific parts like knobs, LEDs), overall_aesthetic.
+"""
+```
+
+```python
+def build_visual_feature_prompt(text):
+    return f"""
+You are an expert in extracting visual and physical product characteristics from text.
+From the following product reviews, extract ONLY concrete visual or physical features of the product.
+Include attributes such as: shape, color, material, texture, size, special patterns, and usage environment.
+Return the output in JSON with this structure:
+{{
+    "materials": [],
+    "colors": [],
+    "shapes": [],
+    "textures": [],
+    "distinctive_patterns": [],
+    "functional_visual_elements": [],
+    "common_usage_scenes": []
+}}
+"""
+```
+
+```python
+features_prompt = f"""
+Analyze the product description and customer reviews to extract key product features.
+PRODUCT DESCRIPTION:
+Title: {product_description.get('title', 'N/A')}
+Key Features:
+{features_text}
+CUSTOMER REVIEWS:
+{condensed_review_text}
+Extract:
+1. Functional Features (what it does)
+2. Design Features (design elements)
+3. Material Features
+4. Size/Portability
+5. Usage Context (where/how used)
+6. Key Selling Points
+Format as JSON:
+{{
+    "functional_features": ["feature1", "feature2"],
+    "design_features": ["feature1", "feature2"],
+    "material_features": ["feature1", "feature2"],
+    "size_portability": "description",
+    "usage_context": ["context1", "context2"],
+    "key_selling_points": ["point1", "point2"]
+}}
+"""
+```
+
+```python
+feature_prompt = f"""
+Extract key functional and design features from these reviews.
+Reviews:
+{all_review_text[:15000]}
+Return JSON with keys:
+functional_features, design_features, connectivity, unique_selling_points.
+"""
+```
+
+---
+
+# Analytics Engine Components
+
+*   No topic extraction for keyboard
+*   Recommended prompts are used directly to generate images
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Massager</th>
+      <th>Keyboard</th>
+      <th>Coffee Set</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Sentiment analysis</td>
+<td>
+        <p>1.Overall sentiment</p>
+        <p>2.Sentiment themes</p>
+        <p>3.Visual sentiment</p>
+        <p>4.Satisfaction score</p>
+      </td>
+<td>
+        <p>1.Overall sentiment</p>
+        <p>2.Sentiment themes</p>
+        <p>3.Visual sentiment</p>
+      </td>
+<td>
+        <p>1.Overall sentiment</p>
+        <p>2.Sentiment distribution</p>
+        <p>3.Reasoning</p>
+        <p>4.Summary</p>
+      </td>
+    </tr>
+<tr>
+      <td>Topic extraction</td>
+<td>
+        <p>1.Topic name</p>
+        <p>2.Description</p>
+        <p>3.Keywords</p>
+        <p>4.Visual relevance</p>
+      </td>
+<td>None</td>
+<td>
+        <p>1.Topic</p>
+        <p>2.Description</p>
+        <p>3.Representative keywords</p>
+        <p>4.Representative comments</p>
+      </td>
+    </tr>
+<tr>
+      <td>Image generation summary</td>
+<td>
+        <p>1.Visual description</p>
+        <p>2.Key visual elements</p>
+        <p>3.Recommended prompts for image generation</p>
+      </td>
+<td>
+        <p>1.Visual description</p>
+        <p>2.Key visual elements</p>
+        <p>3.Recommended prompts for image generation</p>
+      </td>
+<td>Recommended prompts for image generation</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+---
+
+# Image Generation
+
+Transform textual product attributes extracted from customer reviews into realistic product images using image generation models.
+
+We evaluate:
+1. How well models convert text to visual appearance
+2. How different prompts affect fidelity & realism
+3. Model differences between OpenAI and SDXL
+
+---
+
+# Models Used
+
+## OpenAI GPT-Image-1
+
+Introducing our latest image generation model in the API
+
+*   Better at following instructions
+*   More accurate geometry
+*   Lower hallucination
+*   Slightly simpler textures
+
+Try in Playground
+Listen to article 4:25
+
+## Stable Diffusion XL (SDXL)
+
+*   Better at texture realism & lighting
+*   Very aesthetic images
+*   Higher variability
+*   Occasional shape/component errors
+
+Source:
+https://stablediffusionxl.com/
+https://platform.openai.com/docs/models/gpt-image-1
+
+---
+
+# Our Prompt Versioning Strategy
+
+For each of 3 products:
+3 prompt versions
+
+*   **Prompt 1: Natural Language Prompt**
+    *   Reads like a normal description, minimal structure
+*   **Prompt 2: Condensed Attribute-Focused Prompt**
+    *   Removes storytelling language
+    *   Focuses on essential product features
+    *   More consistent than prompt 1
+*   **Prompt 3: Structured Photorealistic Prompt**
+    *   Most structured and detailed
+    *   Includes materials, geometry, textures
+    *   Includes lighting, background, photography style
+
+```json
+"product1_massager": {
+  "v1": """Create an image of a compact, pillow-like back and neck massager in rich brown fabric.
+   The massager should feature soft silicone nodes on each side, an ergonomic design that fits body
+   contours, and Velcro straps for securing it to a chair. Include user-friendly buttons and a
+   zipper for a replacement cover. The overall look should convey a sturdy and modern aesthetic,
+   suitable for therapeutic use in home or office settings.""",
+  "v2": """Ultra-realistic photo of an ergonomic shiatsu massage pillow.
+   Brown faux leather + fabric material, curved compact shape, four rounded massage nodes,
+   simple control buttons, velcro straps. Bright studio lighting, sharp detail.""",
+  "v3": """Realistic studio product photo of a compact, pillow-shaped shiatsu back and neck massager.
+   Key visual features:
+   - rich brown fabric cover made of nylon/polyester
+   - four raised soft silicone massage nodes forming smooth rounded bumps
+   - ergonomic curved design that fits body contours
+   - Velcro straps on the back for attaching to a chair
+   - user-friendly side control buttons and a visible zipper for a replaceable cover
+   Style: clean white seamless background, soft diffused lighting, crisp detail and accurate textures."""
+}
+```
+
+---
+
+# Product 1 (Massager)
+
+## OpenAI
+
+## SDXL
+
+### Key Findings:
+
+*   OpenAI generated images closely match the real massager's shape and color.
+*   The pillow-like outline and four glowing massage nodes are accurately captured.
+*   Button placement is generally correct, though design differs slightly.
+*   Models did not reproduce the blue rotation arrows seen in the real product.
+*   SDXL outputs show higher realism but lower accuracy, often drifting into neck pillows.
+
+---
+
+# Product 2 (Keyboard)
+## Prompts
+
+### Initial prompt (v1):
+
+*Create a image of a retro-style **audio device** with a boxy shape made of thick plastic. The device has a creamy grey body adorned with bold red accents. It features large 'Super Buttons' on the front, a prominent central volume knob, and a soft glowing power LED indicator. The overall design exudes a nostalgic aesthetic reminiscent of classic electronics, highlighting concave keys and a user-friendly layout.*
+
+### Updated prompt (v2):
+
+*Ultra-realistic retro-style **mechanical keyboard** modeled after classic 8-bit consoles. Matte creamy grey ABS plastic housing, bold red accent buttons, oversized Super Buttons, concave retro keycaps, a metallic central volume knob, and an illuminated LED indicator. Bright studio lighting, sharp detail.*
+
+---
+
+# Product 2 (Keyboard)
+
+## OpenAI
+
+## SDXL
+
+Key Findings:
+* OpenAI captures the color scheme (cream gray + red) but often misinterprets the product as a retro console or button box rather than a full keyboard.
+* Layout accuracy is low: OpenAI struggles with accurate key arrangement, legends, and overall keyboard proportions.
+* SDXL outputs show stronger realism but frequently hallucinate incorrect forms (e.g., audio equipment, multi-piece boards, random knob placement).
+* Both models capture the retro aesthetic, but neither achieves true product-level accuracy in geometry or layout.
+
+---
+
+# Product 3 (Hario Pour Over Coffee Set)
+
+## OpenAI
+
+## SDXL
+
+### Key Findings:
+
+*   OpenAI accurately generated all core components (ceramic dripper, glass server, paper filters, scoop) with correct overall arrangement.
+*   The dripper shape (V60 cone + spiral ribs) is captured reasonably well.
+*   The glass carafe shape matches the real product, but measurement markings are inconsistent, and may missing.
+*   Paper filters are recognized correctly as stacked fan shapes, but thickness and orientation vary.
+*   SDXL outputs show high realism but significant semantic drift, like introducing wood bases, metal stands, or unrelated brewing accessories.
+
+---
+
+# Image Generation Summary
+
+*   OpenAI → **higher accuracy**, better at capturing correct shape, layout, and components.
+*   SDXL → **more photorealistic**, but often hallucinates unrelated product forms.
+*   **Structured prompts** produce the most consistent and faithful results.
+*   Both models struggle with **fine details**, UI icons, and precise component geometry.
+*   Customer reviews provide enough signal for **approximate product reconstruction**, but not exact replication.
+
+---
+
+# AI Agentic Workflow
+
+**Researcher Agent**
+* Function: Data ingestion
+* Live Mode: Selenium-based scraping of Amazon product pages (descriptions, reviews)
+
+**Analyst Agent**
+* Function: Use LLMs (GPT-4o) to parse unstructured text
+* Output: Extracts objective visual features and computes sentiment analysis
+
+**Creative Agent**
+* Function: Convert analyst output into a high-fidelity image-generation prompt optimized for diffusion models
+
+**Visualizer Agent**
+* Function: Use DALL·E 3 to generate a visual prototype from the creative prompt
+
+---
+
+# AI Agentic Workflow
+
+## Demo
+
+---
+
+# Challenges and Limitations
+
+**NOISY REVIEWS**
+
+User reviews often contain **inconsistent language** and irrelevant information, making it difficult to extract reliable insights for image generation.
+
+**DATASET GENERALIZABILITY**
+
+Relying on a **small subset** of customer reviews (5-50), the extracted visual features may not fully represent the product, limiting the generalizability and accuracy of the generated images.
+
+**METRIC FOR GENERATED IMAGE**
+
+There is no fixed or standardized metric to **evaluate** the quality of the generated images or to objectively compare them with real product images, making assessment largely subjective.
+
+---
+
+# Future Enhancements
+
+## CHUNKING
+Implementing more effective **chunking** strategies will preserve full contextual meaning across reviews, allowing the LLM to extract richer and more accurate visual features. This enhancement would reduce information loss and ultimately lead to more faithful, higher-quality product image generation.
+
+## GENERATION IMPROVEMENT
+Different **structure** of extracted information could be tested to achieve higher quality.
+**Fine-tuning** the generation model using a selected similarity metric would help the model produce images that more closely match the real product's appearance.
+
+## PIPELINE ENHANCEMENT
+Iteratively **feeding** both the generated images and the original image back into the agent can progressively improve image quality.
+Try a **multiple agent** workflow with each agent assigned specific task with high performance.
+
+---
+
+
+0
+
+Thank You for Your
+Attention
