@@ -1,0 +1,32 @@
+[
+  {
+    "review_id": "R1",
+    "rating": 5,
+    "review_title": "Nostalgia Overload!",
+    "review_body": "This keyboard is a masterpiece. The colors perfectly match my old NES console-that specific creamy grey and the bold red letters. The 'Super Buttons' are comically large but actually super useful for macros. The clicky switches sound like 80s computing bliss."
+  },
+  {
+    "review_id": "R2",
+    "rating": 4,
+    "review_title": "Great looks, okay software",
+    "review_body": "Visually, it's a 10/10. The power LED looks just like the one on the original console. The plastic feels thick and retro. My only gripe is the software to map the keys is a bit clunky, but I mostly bought it for the aesthetic anyway."
+  },
+  {
+    "review_id": "R3",
+    "rating": 5,
+    "review_title": "The best retro keyboard",
+    "review_body": "I love the attention to detail. The volume knob has a satisfying click. It doesn't have RGB lighting, which is perfect because that would ruin the retro vibe. The grey and white color scheme is spot on."
+  },
+  {
+    "review_id": "R4",
+    "rating": 3,
+    "review_title": "Good but loud",
+    "review_body": "It looks amazing on my desk, very clean and boxy design. However, the 'clicky' switches are very loud. If you work in a quiet office, people will hate you. But if you want that retro clack, this is it."
+  },
+  {
+    "review_id": "R5",
+    "rating": 5,
+    "review_title": "Solid build",
+    "review_body": "Heavier than I expected. The keys have a nice concave shape to them. The wireless connectivity is solid. The two giant red buttons are a fun addition that I use for mute and screen snip."
+  }
+]

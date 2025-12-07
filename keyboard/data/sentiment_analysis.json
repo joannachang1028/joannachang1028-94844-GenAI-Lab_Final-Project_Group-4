@@ -1,0 +1,19 @@
+{
+  "overall_sentiment": {
+    "positive": 80,
+    "neutral": 20,
+    "negative": 0
+  },
+  "positive_themes": [
+    "Aesthetic appeal",
+    "Attention to detail",
+    "Satisfying sound",
+    "Solid build quality",
+    "Fun and useful design elements"
+  ],
+  "negative_themes": [
+    "Clunky software",
+    "Loudness of switches in quiet environments"
+  ],
+  "visual_sentiment": "very positive"
+}

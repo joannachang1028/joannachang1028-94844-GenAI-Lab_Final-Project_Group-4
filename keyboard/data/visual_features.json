@@ -1,0 +1,19 @@
+{
+  "colors": [
+    "creamy grey",
+    "bold red"
+  ],
+  "materials": [
+    "thick plastic"
+  ],
+  "shape_design": [
+    "boxy",
+    "concave keys"
+  ],
+  "visual_features": [
+    "large 'Super Buttons'",
+    "volume knob",
+    "power LED"
+  ],
+  "overall_aesthetic": "retro"
+}

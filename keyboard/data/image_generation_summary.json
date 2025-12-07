@@ -1,0 +1,13 @@
+{
+  "visual_description": "The product image features a retro-style audio device characterized by a boxy shape made of thick plastic. The dominant colors are creamy grey and bold red, which create a striking contrast. The front of the device displays large 'Super Buttons' that are easy to identify and interact with, enhancing its nostalgic appeal. A prominent volume knob is positioned centrally, inviting users to adjust sound easily. Additionally, a power LED indicator emits a soft glow, signifying the device's operational status. The overall aesthetic of the design is distinctly retro, evoking a sense of nostalgia while blending modern functionality with classic charm.",
+  "key_visual_elements": [
+    "Creamy grey and bold red color scheme",
+    "Thick plastic material",
+    "Boxy shape design",
+    "Concave keys for easy access",
+    "Large 'Super Buttons' on the front",
+    "Central volume knob",
+    "Power LED indicator"
+  ],
+  "recommended_prompt_for_image_generation": "A retro-style audio device with a boxy shape made of thick plastic. The device has a creamy grey body adorned with bold red accents. It features large 'Super Buttons' on the front, a prominent central volume knob, and a soft glowing power LED indicator. The overall design exudes a nostalgic aesthetic reminiscent of classic electronics, highlighting concave keys and a user-friendly layout."
+}
